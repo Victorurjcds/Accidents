@@ -7,4 +7,7 @@ Dataset: Expedientes.mat
 Rows: samples
 Columns: features
 
-
+Results: 
+results.p: two pandas Series [Acc test and AUC] for 100 different subsamples.
+Acc: test accuracy
+Acc_zoom: test accuracy zoom
