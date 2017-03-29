@@ -1,11 +1,16 @@
 # Accidents
 Estimation of car accidents importance
 
-We have several features about accidents such as: year, day, month, road surface, GPS coordinates, traffic index, etc. We have to estimate wether level of importance for each accident is high or not.
+We have several features about accidents such as: year, day, month, road surface, GPS coordinates, traffic index, etc. We have to estimate wether an accident is relevant or not.
 
 Dataset: Expedientes.mat  
-- Rows: samples
-- Columns: features
+- Rows: 9341 samples
+- Columns: 86 features
+
+
+Note: N_Muertos, N_Graves, N_Leves, N_Victimas and importance level should be deleted for data analysis because they are correlated with output (Gravedad features)
+
+
 
 Results: 
 - results.p: two pandas Series [Acc test and AUC] for 100 different subsamples.
