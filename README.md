@@ -8,7 +8,7 @@ Dataset: Expedientes.mat
 - Columns: 86 features
 
 
-Note: N_Muertos, N_Graves, N_Leves, N_Victimas and importance level should be deleted for data analysis because they are correlated with output (Gravedad features)
+Note: N_Muertos, N_Graves, N_Leves, N_Victimas and Grado_Gravedad (importance level) should be deleted for data analysis because they are correlated with output (Gravedad features).
 
 
 
