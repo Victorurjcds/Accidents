@@ -1,5 +1,5 @@
 # Accidents
-Estimation of car accidents importance
+Estimation of car accidents importance. Database was supported by DGT.
 
 We have several features about accidents such as: year, day, month, road surface, GPS coordinates, traffic index, etc. We have to estimate wether an accident is relevant or not.
 
