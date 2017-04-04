@@ -21,7 +21,7 @@ os.chdir('C:/Users/Victor/Documents/Ambito_profesional/proyectos/accidentes')
 
 
 # import libraries
-from loading2_balanceado0_1 import load_dataset
+from loading import load_dataset
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -49,23 +49,37 @@ for j in range(100):
     y_train = y_train.drop('index',axis=1)
 
     # Normalization of IMD and GPS:
-    data['GPS_x'] = (data['GPS_x']-data['GPS_x'].mean())/data['GPS_x'].std()
-    data['GPS_y'] = (data['GPS_y']-data['GPS_y'].mean())/data['GPS_y'].std()
-    data['GPS_z'] = (data['GPS_z']-data['GPS_z'].mean())/data['GPS_z'].std()
-    data['IMD'] = (data['IMD']-data['IMD'].mean())/data['IMD'].std()
-
+    average_x = X_train['GPS_x'].mean()
+    stderror_x = X_train['GPS_x'].std()
+    average_y = X_train['GPS_y'].mean()
+    stderror_y = X_train['GPS_y'].std()
+    average_z = X_train['GPS_z'].mean()
+    stderror_z = X_train['GPS_z'].std()
+    average_IMD = X_train['IMD'].mean()
+    stderror_IMD = X_train['IMD'].std()
+    X_train_norm = X_train.copy()
+    X_test_norm = X_test.copy()
+    X_train_norm['GPS_x'] = (X_train['GPS_x']-average_x)/stderror_z                              # only X_train dataset
+    X_train_norm['GPS_y'] = (X_train['GPS_y']-average_y)/stderror_y
+    X_train_norm['GPS_z'] = (X_train['GPS_z']-average_z)/stderror_z
+    X_train_norm['IMD'] = (X_train['IMD']-average_IMD)/stderror_IMD
+    
+    X_test_norm['GPS_x'] = (X_test['GPS_x']-average_x)/stderror_z                              # only X_train dataset
+    X_test_norm['GPS_y'] = (X_test['GPS_y']-average_y)/stderror_y
+    X_test_norm['GPS_z'] = (X_test['GPS_z']-average_z)/stderror_z
+    X_test_norm['IMD'] = (X_test['IMD']-average_IMD)/stderror_IMD
 
 
 ###############################################################################
 ###############################################################################
 # Feature selection:    
-    clf = rfc(n_estimators=100, max_features='auto', class_weight='balanced_subsample', n_jobs=-1, random_state=31)       # balanceo en cada árbol.
+    clf = rfc(n_estimators=100, max_features='auto', class_weight='balanced_subsample', n_jobs=-1, random_state=31)       # each tree is balanced.
     kf = kfold(n_splits=10, random_state=31)
     Acc = pd.Series(np.zeros((kf.n_splits)))
-    feat_imp = pd.DataFrame(np.zeros((len(X_train.ix[1,:]),kf.n_splits)))
+    feat_imp = pd.DataFrame(np.zeros((len(X_train_norm.ix[1,:]),kf.n_splits)))
     i=0
-    for train_index, validation_index in kf.split(X_train):
-        X_tra, X_val = X_train.ix[train_index,:], X_train.ix[validation_index,:]
+    for train_index, validation_index in kf.split(X_train_norm):
+        X_tra, X_val = X_train_norm.ix[train_index,:], X_train_norm.ix[validation_index,:]
         y_tra, y_val = y_train.ix[train_index], y_train.ix[validation_index]  
         clf = clf.fit(X_tra, y_tra['Gravedad'])
         prediction = clf.predict(X_val)
@@ -75,7 +89,7 @@ for j in range(100):
     Acc_final_rf = np.mean(Acc)
     feat_imp = np.mean(feat_imp,axis=1)
     lista1, ordered_feat = zip(*sorted(zip(feat_imp, features), reverse=True))
-    final = clf.predict(X_test)
+    final = clf.predict(X_test_norm)
     Acc_test[j] = np.mean(final==y_test)
     AUC[j] = ras(y_test, final, average='macro')
     del clf,kf,Acc
