@@ -17,5 +17,5 @@ Results:
 - Acc: test accuracy
 - Acc_zoom: test accuracy zoom
 
-Acc_test shows a mean of 73,6% with a standard deviation of 3%.
+Acc_test shows a mean of 73,6% with a standard deviation of 1,3%.
 
