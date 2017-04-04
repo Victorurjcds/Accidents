@@ -16,3 +16,6 @@ Results:
 - results.p: two pandas Series [Acc test and AUC] for 100 different subsamples.
 - Acc: test accuracy
 - Acc_zoom: test accuracy zoom
+
+Acc_test shows a mean of 73,6% with a standard deviation of 3%.
+
